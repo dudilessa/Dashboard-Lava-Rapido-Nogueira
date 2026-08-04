@@ -8,7 +8,7 @@ function Dashboard({ onSair }) {
         <button onClick={onSair}>Sair</button>
       </header>
 
-      <p>Dashboard em construção. Próximo passo: plugar as premissas e os gráficos.</p>
+      <p>Teste de deploy automático funcionando!</p>
     </div>
   );
 }
