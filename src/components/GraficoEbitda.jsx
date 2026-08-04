@@ -1,7 +1,6 @@
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { anos } from '../data/mockData';
 
-function GraficoEbitda({ ebitdaPorAno }) {
+function GraficoEbitda({ anos, ebitdaPorAno }) {
   const dados = anos.map((ano, i) => ({
     ano,
     ebitda: Math.round(ebitdaPorAno[i]),

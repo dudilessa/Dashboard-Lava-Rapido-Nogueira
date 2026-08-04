@@ -1,8 +1,9 @@
 // Dados FICTÍCIOS — servem só para testar a interatividade do layout.
 // Quando o modelo financeiro real estiver pronto, troque os valores
-// default e a lógica de calcularProjecao() por baixo. Os componentes
+// default e a lógica de projetarReceitaEbitdaMock() por baixo. Os componentes
 // que consomem isso (CardMetrica, GraficoReceita, GraficoEbitda) não
-// precisam mudar.
+// precisam mudar. calcularMetricas() também é reaproveitada para dados
+// vindos de planilhas enviadas pelo usuário (veja src/utils/planilha.js).
 
 export const anos = [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035];
 
@@ -11,22 +12,32 @@ export const premissasDefault = {
   crescimentoReceita: 0.10, // crescimento anual da receita
   perpetuidadeG: 0.03,  // crescimento na perpetuidade
   comInvestimento: true, // toggle: cenário com ou sem investimento
+  dividaLiquida: 0,     // abatida do Enterprise Value para chegar no Equity Value
 };
 
 const RECEITA_BASE_2026 = 480000; // R$/ano, ponto de partida fictício
 const MARGEM_EBITDA = 0.22;
 
-// Fórmula simplificada só para demonstração — não é o modelo real do Nogueira.
-export function calcularProjecao(premissas) {
-  const { wacc, crescimentoReceita, perpetuidadeG, comInvestimento } = premissas;
+// Projeção fictícia de receita/EBITDA usada apenas quando não há planilha carregada.
+function projetarReceitaEbitdaMock(premissas) {
+  const { crescimentoReceita, comInvestimento } = premissas;
   const fatorInvestimento = comInvestimento ? 1 : 0.4; // "sem investimento" cresce bem menos
 
-  const receitaPorAno = anos.map((ano, i) => {
+  const receitaPorAno = anos.map((_, i) => {
     const crescimentoEfetivo = crescimentoReceita * fatorInvestimento;
     return RECEITA_BASE_2026 * Math.pow(1 + crescimentoEfetivo, i);
   });
 
   const ebitdaPorAno = receitaPorAno.map((r) => r * MARGEM_EBITDA);
+
+  return { receitaPorAno, ebitdaPorAno };
+}
+
+// Fórmula simplificada só para demonstração — não é o modelo real do Nogueira.
+// Funciona tanto para a série fictícia quanto para receita/EBITDA vindos de planilha.
+export function calcularMetricas({ anosProjecao, receitaPorAno, ebitdaPorAno, premissas }) {
+  const { wacc, crescimentoReceita, perpetuidadeG, comInvestimento, dividaLiquida = 0 } = premissas;
+  const fatorInvestimento = comInvestimento ? 1 : 0.4;
 
   // VPL simplificado: soma do EBITDA descontado a WACC
   const vplOperacional = ebitdaPorAno.reduce(
@@ -37,10 +48,10 @@ export function calcularProjecao(premissas) {
   // Valor terminal (perpetuidade de Gordon) descontado a valor presente
   const ebitdaFinal = ebitdaPorAno[ebitdaPorAno.length - 1];
   const valorTerminal = (ebitdaFinal * (1 + perpetuidadeG)) / (wacc - perpetuidadeG);
-  const valorTerminalDescontado = valorTerminal / Math.pow(1 + wacc, anos.length);
+  const valorTerminalDescontado = valorTerminal / Math.pow(1 + wacc, anosProjecao.length);
 
   const enterpriseValue = vplOperacional + valorTerminalDescontado;
-  const equityValue = enterpriseValue; // fictício: sem dívida líquida por ora
+  const equityValue = enterpriseValue - dividaLiquida;
   const tir = crescimentoReceita * fatorInvestimento + wacc * 0.3; // aproximação só para demo
 
   return {
@@ -51,4 +62,9 @@ export function calcularProjecao(premissas) {
     vplOperacional,
     tir,
   };
+}
+
+export function calcularProjecao(premissas) {
+  const { receitaPorAno, ebitdaPorAno } = projetarReceitaEbitdaMock(premissas);
+  return calcularMetricas({ anosProjecao: anos, receitaPorAno, ebitdaPorAno, premissas });
 }

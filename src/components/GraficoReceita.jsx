@@ -1,7 +1,6 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { anos } from '../data/mockData';
 
-function GraficoReceita({ receitaPorAno }) {
+function GraficoReceita({ anos, receitaPorAno }) {
   const dados = anos.map((ano, i) => ({
     ano,
     receita: Math.round(receitaPorAno[i]),
