@@ -1,0 +1,59 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: #0f1115;
+  color: #f2f2f2;
+}
+
+.tela-login,
+.tela-dashboard {
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+.tela-login {
+  max-width: 320px;
+  margin: 0 auto;
+  padding-top: 15vh;
+}
+
+.tela-login form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.tela-login input {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #333;
+  background: #1a1d23;
+  color: #f2f2f2;
+}
+
+.tela-login button,
+.tela-dashboard button {
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: none;
+  background: #d97757;
+  color: #fff;
+  cursor: pointer;
+}
+
+.erro {
+  color: #e05d5d;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.tela-dashboard header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
