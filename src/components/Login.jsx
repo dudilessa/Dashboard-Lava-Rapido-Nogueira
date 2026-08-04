@@ -19,20 +19,26 @@ function Login({ onEntrar }) {
 
   return (
     <div className="tela-login">
-      <h1>Lava-Rápido Nogueira</h1>
-      <p>Dashboard financeiro</p>
+      <img src="/logo.png" alt="Lava-Rápido Nogueira" className="tela-login-logo" />
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="senha">Senha</label>
-        <input
-          id="senha"
-          type="password"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-        />
-        {erro && <p className="erro">Senha incorreta.</p>}
-        <button type="submit">Entrar</button>
-      </form>
+      <div className="tela-login-card">
+        <h1>Dashboard financeiro</h1>
+        <p>Acesse as projeções e premissas do negócio.</p>
+
+        <form onSubmit={handleSubmit}>
+          <label htmlFor="senha">
+            Senha
+            <input
+              id="senha"
+              type="password"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+            />
+          </label>
+          {erro && <p className="erro">Senha incorreta.</p>}
+          <button type="submit">Entrar</button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -65,7 +65,35 @@ aba do projeto → Deployments).
 
     src/
       components/
-        Login.jsx       -> tela de login (client-side, sem backend)
-        Dashboard.jsx    -> placeholder do dashboard principal
-      App.jsx            -> alterna entre Login e Dashboard
-      index.css          -> estilos globais
+        Login.jsx          -> tela de login (client-side, sem backend)
+        Dashboard.jsx       -> monta a tela: controles + cards + gráficos
+        CardMetrica.jsx     -> card individual de métrica (reutilizável)
+        SliderPremissa.jsx  -> slider individual de premissa (reutilizável)
+        GraficoReceita.jsx  -> gráfico de área, receita projetada (Recharts)
+        GraficoEbitda.jsx   -> gráfico de barras, EBITDA (Recharts)
+      data/
+        mockData.js         -> premissas fictícias + fórmula de cálculo
+      App.jsx                -> alterna entre Login e Dashboard
+      index.css               -> estilos globais
+
+## Identidade visual
+
+Paleta extraída do logo (`public/logo.png`), definida como variáveis CSS em
+`src/index.css` (topo do arquivo, dentro de `:root`):
+- `--navy` (#002b74) e `--blue` (#2f6fd1): tons principais, botões e destaques
+- `--sky` (#7dbbe0) e `--ice` (#d9f0ff): acentos claros, gráficos
+- `--teal` (#2dd4bf): valores positivos nos cards de métrica
+- Tipografia: Space Grotesk (títulos/números) + Inter (texto), via Google Fonts
+
+Pra trocar qualquer cor do dashboard inteiro, edita só essas variáveis no
+`:root` — não precisa mexer componente por componente.
+
+## Trocando os dados fictícios pelos reais
+
+Todo o cálculo está isolado em `src/data/mockData.js`:
+- `premissasDefault` -> valores iniciais dos sliders (WACC, crescimento, perpetuidade)
+- `calcularProjecao()` -> a fórmula que transforma premissas em resultado
+
+Quando o modelo financeiro do Nogueira estiver pronto, edite só esse arquivo
+(os valores default e a lógica dentro de calcularProjecao). Os componentes
+visuais (cards, sliders, gráficos) não precisam ser tocados.
