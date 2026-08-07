@@ -2,8 +2,7 @@
 // Quando o modelo financeiro real estiver pronto, troque os valores
 // default e a lógica de projetarReceitaEbitdaMock() por baixo. Os componentes
 // que consomem isso (CardMetrica, GraficoReceita, GraficoEbitda) não
-// precisam mudar. calcularMetricas() também é reaproveitada para dados
-// vindos de planilhas enviadas pelo usuário (veja src/utils/planilha.js).
+// precisam mudar.
 
 export const anos = [2026, 2027, 2028, 2029, 2030, 2031, 2032, 2033, 2034, 2035];
 
@@ -18,7 +17,7 @@ export const premissasDefault = {
 const RECEITA_BASE_2026 = 480000; // R$/ano, ponto de partida fictício
 const MARGEM_EBITDA = 0.22;
 
-// Projeção fictícia de receita/EBITDA usada apenas quando não há planilha carregada.
+// Projeção fictícia de receita/EBITDA.
 function projetarReceitaEbitdaMock(premissas) {
   const { crescimentoReceita, comInvestimento } = premissas;
   const fatorInvestimento = comInvestimento ? 1 : 0.4; // "sem investimento" cresce bem menos
@@ -34,7 +33,6 @@ function projetarReceitaEbitdaMock(premissas) {
 }
 
 // Fórmula simplificada só para demonstração — não é o modelo real do Nogueira.
-// Funciona tanto para a série fictícia quanto para receita/EBITDA vindos de planilha.
 export function calcularMetricas({ anosProjecao, receitaPorAno, ebitdaPorAno, premissas }) {
   const { wacc, crescimentoReceita, perpetuidadeG, comInvestimento, dividaLiquida = 0 } = premissas;
   const fatorInvestimento = comInvestimento ? 1 : 0.4;
