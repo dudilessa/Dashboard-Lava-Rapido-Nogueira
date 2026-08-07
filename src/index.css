@@ -194,6 +194,56 @@ h1, h2, h3 {
   filter: none;
 }
 
+.abas-nav {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.abas-nav button {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  color: var(--text-secondary);
+  font-weight: 500;
+  font-size: 0.9rem;
+  padding: 0 0 0.75rem;
+  border-bottom: 2px solid transparent;
+}
+
+.abas-nav button:hover {
+  filter: none;
+  color: var(--text);
+}
+
+.abas-nav button.ativo {
+  color: var(--text);
+  border-bottom-color: var(--blue);
+}
+
+.estado-vazio {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 3rem 2rem;
+  text-align: center;
+  color: var(--text-secondary);
+}
+
+.estado-vazio h2 {
+  font-size: 1.1rem;
+  color: var(--text);
+  margin: 0 0 0.6rem;
+}
+
+.estado-vazio p {
+  max-width: 480px;
+  margin: 0 auto;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
 .barra-controles {
   display: flex;
   flex-wrap: wrap;
