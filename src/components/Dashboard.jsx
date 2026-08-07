@@ -4,7 +4,7 @@ import SliderPremissa from './SliderPremissa';
 import GraficoReceita from './GraficoReceita';
 import GraficoEbitda from './GraficoEbitda';
 import DemonstrativosFinanceiros from './DemonstrativosFinanceiros';
-import { anos as anosMock, premissasDefault, calcularProjecao } from '../data/mockData';
+import { anosProjecao, premissasDefault, calcularProjecao } from '../data/financialData';
 
 const ABAS = [
   { id: 'visao-geral', rotulo: 'Visão geral' },
@@ -87,16 +87,30 @@ function Dashboard({ onSair }) {
             />
           </div>
 
+          <p className={`aviso-cenario ${resultado.cenarioBase ? 'base' : 'simulado'}`}>
+            {resultado.cenarioBase
+              ? 'Cenário base — valores do DCF da planilha (2026-2031)'
+              : 'Simulação aproximada — premissas alteradas em relação à planilha'}
+          </p>
+
           <div className="grade-cards">
-            <CardMetrica titulo="Enterprise Value" valor={resultado.enterpriseValue} legenda="VPL da firma" />
+            <CardMetrica
+              titulo="Enterprise Value"
+              valor={resultado.enterpriseValue}
+              legenda={resultado.cenarioBase ? 'VPL dos FCFF da planilha' : 'VPL da firma (aproximado)'}
+            />
             <CardMetrica titulo="Equity Value" valor={resultado.equityValue} legenda="EV - dívida líquida" />
-            <CardMetrica titulo="VPL Operacional" valor={resultado.vplOperacional} legenda="Soma EBITDA descontado" />
-            <CardMetrica titulo="TIR" valor={resultado.tir} formato="percentual" legenda="estimativa" />
+            <CardMetrica
+              titulo="VPL Operacional"
+              valor={resultado.vplOperacional}
+              legenda={resultado.cenarioBase ? "Soma dos FCFF's descontados" : 'Soma EBITDA descontado (aproximado)'}
+            />
+            <CardMetrica titulo="TIR" valor={resultado.tir} formato="percentual" legenda={resultado.cenarioBase ? 'planilha' : 'estimativa'} />
           </div>
 
           <div className="grade-graficos">
-            <GraficoReceita anos={anosMock} receitaPorAno={resultado.receitaPorAno} />
-            <GraficoEbitda anos={anosMock} ebitdaPorAno={resultado.ebitdaPorAno} />
+            <GraficoReceita anos={anosProjecao} receitaPorAno={resultado.receitaPorAno} />
+            <GraficoEbitda anos={anosProjecao} ebitdaPorAno={resultado.ebitdaPorAno} />
           </div>
         </>
       )}
