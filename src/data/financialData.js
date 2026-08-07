@@ -1,4 +1,4 @@
-// Dados extraídos de "Cópia Modelo Claude Code.xlsx" (abas Model, Valuation).
+// Dados extraídos de "Fin_Capacitação Entrega Grupo 02.xlsx" (abas Model, Valuation).
 // Séries históricas (2015-2025) e projetadas (2026-2031), consolidando as
 // operações de Claudemir (pessoa física) e da Empresa. Valores em R$ (reais).
 
@@ -24,8 +24,8 @@ export const dre = {
 };
 
 export const balanco = {
-  ativoCirculante: [80628, 98821, 101130, 101147, 98117, 86226, 95635, 98533, 96905, 96215, 96182, 99766, 91048, 66785, 409547, 730472, 1012590],
-  ativoNaoCirculante: [57978, 82748, 70370, 74192, 93907, 80396, 79124, 76434, 74926, 67852, 56492, 49160, 49160, 49160, 49160, 49160, 49160],
+  ativoCirculante: [80628, 98821, 101130, 101147, 98117, 86226, 95635, 98533, 96905, 96215, 96182, 99766, 38682, 66445, 480801, 886934, 1269515],
+  ativoNaoCirculante: [57978, 82748, 70370, 74192, 93907, 80396, 79124, 76434, 74926, 67852, 56492, 49160, 101526, 49500, -22094, -107302, -207765],
   ativoTotal: [138606, 181569, 171500, 175339, 192024, 166622, 174759, 174967, 171831, 164067, 152674, 148926, 140208, 115945, 458707, 779632, 1061750],
   passivoCirculante: [44046, 49760, 52252, 58003, 62249, 68782, 74905, 86123, 83979, 90521, 97982, 113065, 113607, 137271, 160421, 180472, 197134],
   passivoNaoCirculante: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 90000, 76215, 370281, 613446, 800623],
@@ -37,30 +37,40 @@ export const fluxoCaixa = {
   lucroLiquido: [36146, 28902, 29674, 23611, 22622, -24785, 2389, -11767, -4464, -29519, -44280, -51930, -99260, -34143, 25546, 57710, 78278],
   depreciacaoAmortizacao: [11348, 12730, 14578, 13976, 15085, 17412, 16773, 16990, 15408, 16073, 15261, 14664, 35661, 55426, 71594, 89108, 106263],
   cfo: [47978, 41708, 43989, 41925, 42673, 4285, 19047, 13119, 9727, -6672, -21742, -25697, -58365, 26685, 102754, 151965, 189199],
-  capex: [0, -36118, -352, -18400, -33691, -1574, -16140, -14083, -15482, -8334, -4713, -7929, -35661, -55426, -71594, -89108, -106263],
-  cfi: [0, -36118, -352, -18400, -33691, -1574, -16140, -14083, -15482, -8334, -4713, -7929, -35661, -55426, -71594, -89108, -106263],
+  capex: [0, -36118, -352, -18400, -33691, -1574, -16140, -14083, -15482, -8334, -4713, -7929, -88027, -3400, 0, -3900, -5800],
+  cfi: [0, -36118, -352, -18400, -33691, -1574, -16140, -14083, -15482, -8334, -4713, -7929, -88027, -3400, 0, -3900, -5800],
   cff: [0, 8346, -42232, -25523, -10181, -7153, -374, 756, 3471, 15214, 25427, 7136, 90000, -13785, 294066, 243164, 187178],
-  caixaInicial: [0, 47978, 61914, 63319, 61321, 60122, 55680, 58213, 58005, 55721, 55929, 54901, 51000, 46974, 4449, 329675, 635696],
-  variacaoCaixa: [47978, 13936, 1405, -1998, -1199, -4442, 2533, -208, -2284, 208, -1028, -26490, -4026, -42526, 325226, 306021, 270114],
-  caixaFinal: [47978, 61914, 63319, 61321, 60122, 55680, 58213, 58005, 55721, 55929, 54901, 28411, 46974, 4449, 329675, 635696, 905810],
+  caixaInicial: [0, 47978, 61914, 63319, 61321, 60122, 55680, 58213, 58005, 55721, 55929, 54901, 51000, -5392, 4108, 400929, 792158],
+  variacaoCaixa: [47978, 13936, 1405, -1998, -1199, -4442, 2533, -208, -2284, 208, -1028, -26490, -56392, 9500, 396821, 391229, 370577],
+  caixaFinal: [47978, 61914, 63319, 61321, 60122, 55680, 58213, 58005, 55721, 55929, 54901, 28411, -5392, 4108, 400929, 792158, 1162735],
 };
 
-// Resultado do DCF da aba "Valuation" (cenário base do modelo, com investimento).
+// FCFF unlevered (aba Valuation, linha "FCFF (corrente)"): NOPAT (EBIT à
+// alíquota teórica de desalavancagem) + D&A - Capex - ΔWK. É o fluxo que a
+// própria planilha desconta no DCF — diferente do IR/CSLL efetivamente pago
+// (Simples Nacional) que aparece na DRE, aqui usa-se uma alíquota teórica só
+// para desalavancar o EBIT.
+const ALIQUOTA_IR_DESALAVANCAGEM = 0.34;
+const fcffHistoricoEProjetado = [38334, 1275, 35888, 10941, -7103, -8197, 4743, -9023, -3330, -15880, -24064, -25582, -119795, 54293, 150238, 222512, 279565];
+
+// Resultado do DCF da aba "Valuation" (cenário base do modelo).
 export const valuationBase = {
-  wacc: 0.25027532332486613,
+  wacc: 0.2930667480329336,
   perpetuidadeG: 0.035,
-  enterpriseValue: 82578,
-  equityValue: 79008,
-  vplOperacional: 82578,
-  tir: 0.5279608132371714,
-  dividaLiquida: 3570,
+  enterpriseValue: 254686,
+  equityValue: 195286,
+  vplOperacional: 108781, // "VPL dos FCFF's" — soma dos FCFF descontados, SEM valor terminal
+  tir: 0.6977359372275913,
+  dividaLiquida: 59400,
 };
 
 export const premissasDefault = {
-  wacc: 0.25,           // taxa de desconto (WACC calculado na aba Valuation)
+  // O slider de WACC parte do valor exato da planilha (não arredondado): como
+  // não há mais fator de calibração, qualquer diferença aqui viraria um salto
+  // no instante em que o slider sai da posição padrão.
+  wacc: valuationBase.wacc,
   crescimentoReceita: 0.21, // CAGR da receita líquida projetada 2026-2031
   perpetuidadeG: 0.035,  // crescimento na perpetuidade (aba Valuation)
-  comInvestimento: true, // toggle: cenário com ou sem investimento
   dividaLiquida: valuationBase.dividaLiquida,
 };
 
@@ -68,53 +78,100 @@ function ehCenarioBase(premissas) {
   return (
     premissas.wacc === premissasDefault.wacc &&
     premissas.crescimentoReceita === premissasDefault.crescimentoReceita &&
-    premissas.perpetuidadeG === premissasDefault.perpetuidadeG &&
-    premissas.comInvestimento === premissasDefault.comInvestimento
+    premissas.perpetuidadeG === premissasDefault.perpetuidadeG
   );
 }
 
-// Fora do cenário base, os sliders simulam um "e se": a receita líquida de 2026
-// (ponto real da planilha) é projetada com a taxa de crescimento escolhida, e a
-// margem EBITDA de cada ano da planilha é preservada (o formato real da curva —
-// margem negativa nos anos de investimento pesado, recuperando depois — se
-// mantém, só a inclinação da receita muda).
-function projetarCenarioSimulado(premissas) {
-  const { crescimentoReceita, comInvestimento } = premissas;
-  const fatorInvestimento = comInvestimento ? 1 : 0.4;
+// Séries reais da planilha para os anos projetados (2026-2031): receita,
+// EBITDA, EBIT e o próprio FCFF unlevered usado no DCF real. É a base de tudo
+// que os sliders simulam a partir daqui.
+const indicesProjecao = anosProjecao.map((ano) => anos.indexOf(ano));
+const receitaReal = indicesProjecao.map((i) => dre.receitaLiquida[i]);
+const ebitdaReal = indicesProjecao.map((i) => dre.ebitda[i]);
+const ebitReal = indicesProjecao.map((i) => dre.ebit[i]);
+const fcffReal = indicesProjecao.map((i) => fcffHistoricoEProjetado[i]);
 
-  const receitaBase = dre.receitaLiquida[anos.indexOf(anosProjecao[0])];
-  const margens = anosProjecao.map((ano) => {
-    const i = anos.indexOf(ano);
-    return dre.ebitda[i] / dre.receitaLiquida[i];
-  });
-
-  const receitaPorAno = anosProjecao.map(
-    (_, i) => receitaBase * Math.pow(1 + crescimentoReceita * fatorInvestimento, i)
-  );
-  const ebitdaPorAno = receitaPorAno.map((receita, i) => receita * margens[i]);
-
-  return { receitaPorAno, ebitdaPorAno };
+// O slider de crescimento não substitui a curva real por uma reta composta:
+// ele reescala cada ano real pela razão entre a taxa escolhida e a taxa
+// implícita no modelo (premissasDefault.crescimentoReceita), preservando o
+// formato real do ciclo de investimento (o FCFF muito negativo em 2027, ano
+// do grande aporte em CAPEX, recuperando depois) e só esticando/comprimindo
+// o ritmo de crescimento.
+function fatoresCrescimento(crescimentoReceita) {
+  const razao = (1 + crescimentoReceita) / (1 + premissasDefault.crescimentoReceita);
+  return anosProjecao.map((_, i) => Math.pow(razao, i));
 }
 
-// VPL simplificado (soma do EBITDA descontado a WACC) + valor terminal (Gordon).
-// É uma aproximação do modelo real (que desconta FCFF ano a ano) — usada só
-// quando o usuário se afasta do cenário base via os sliders.
-function calcularMetricasSimuladas({ receitaPorAno, ebitdaPorAno, premissas }) {
-  const { wacc, perpetuidadeG, comInvestimento, crescimentoReceita, dividaLiquida = premissasDefault.dividaLiquida } = premissas;
-  const fatorInvestimento = comInvestimento ? 1 : 0.4;
+function projetarFluxosReais(premissas) {
+  const fatores = fatoresCrescimento(premissas.crescimentoReceita);
+  return {
+    receitaPorAno: receitaReal.map((v, i) => v * fatores[i]),
+    ebitdaPorAno: ebitdaReal.map((v, i) => v * fatores[i]),
+    ebitPorAno: ebitReal.map((v, i) => v * fatores[i]),
+    fcffPorAno: fcffReal.map((v, i) => v * fatores[i]),
+  };
+}
 
-  const vplOperacional = ebitdaPorAno.reduce(
-    (acc, ebitda, i) => acc + ebitda / Math.pow(1 + wacc, i + 1),
+// DCF real, igual ao da planilha: soma o FCFF descontado a WACC, valor
+// terminal por Gordon sobre o NOPAT do último ano (não o FCFF cheio — na
+// perpetuidade assume-se capex ≈ D&A e ΔWK ≈ 0, exatamente como a aba
+// Valuation define "FCFF Perpetuidade"). Os sliders de WACC (mín. 5%) e
+// perpetuidade (máx. 6%) podem se cruzar; o spread mínimo de 3 p.p. evita que
+// o valor terminal exploda nesse canto do intervalo.
+function descontarFluxos(fcffPorAno, ebitFinal, wacc, perpetuidadeG) {
+  const vplOperacional = fcffPorAno.reduce(
+    (acc, fcff, i) => acc + fcff / Math.pow(1 + wacc, i + 1),
     0
   );
+  const gEfetivo = Math.min(perpetuidadeG, wacc - 0.03);
+  const nopatFinal = ebitFinal * (1 - ALIQUOTA_IR_DESALAVANCAGEM);
+  const valorTerminal = (nopatFinal * (1 + gEfetivo)) / (wacc - gEfetivo);
+  const valorTerminalDescontado = valorTerminal / Math.pow(1 + wacc, fcffPorAno.length);
+  return { vplOperacional, valorTerminalDescontado };
+}
 
-  const ebitdaFinal = ebitdaPorAno[ebitdaPorAno.length - 1];
-  const valorTerminal = (ebitdaFinal * (1 + perpetuidadeG)) / (wacc - perpetuidadeG);
-  const valorTerminalDescontado = valorTerminal / Math.pow(1 + wacc, anosProjecao.length);
+// TIR real: raiz por bisseção do próprio fluxo de FCFF (2026-2031, sem valor
+// terminal — é assim que a aba Valuation calcula a TIR), em vez de uma
+// fórmula linear arbitrária. Não depende de WACC nem de calibração: com o
+// FCFF real, a fórmula já bate com o número da planilha no cenário padrão.
+function calcularVPL(fluxos, taxa) {
+  return fluxos.reduce((acc, fluxo, i) => acc + fluxo / Math.pow(1 + taxa, i + 1), 0);
+}
 
+function calcularTIR(fluxos) {
+  let baixo = -0.9;
+  let alto = 5;
+  let vplBaixo = calcularVPL(fluxos, baixo);
+  const vplAlto = calcularVPL(fluxos, alto);
+  if (vplBaixo * vplAlto > 0) return null;
+
+  for (let iter = 0; iter < 100; iter += 1) {
+    const meio = (baixo + alto) / 2;
+    const vplMeio = calcularVPL(fluxos, meio);
+    if (Math.abs(vplMeio) < 1e-6) return meio;
+    if ((vplMeio > 0) === (vplBaixo > 0)) {
+      baixo = meio;
+      vplBaixo = vplMeio;
+    } else {
+      alto = meio;
+    }
+  }
+  return (baixo + alto) / 2;
+}
+
+function calcularMetricasSimuladas(premissas) {
+  const { wacc, perpetuidadeG, dividaLiquida = premissasDefault.dividaLiquida } = premissas;
+  const { receitaPorAno, ebitdaPorAno, ebitPorAno, fcffPorAno } = projetarFluxosReais(premissas);
+
+  const { vplOperacional, valorTerminalDescontado } = descontarFluxos(
+    fcffPorAno,
+    ebitPorAno[ebitPorAno.length - 1],
+    wacc,
+    perpetuidadeG
+  );
   const enterpriseValue = vplOperacional + valorTerminalDescontado;
   const equityValue = enterpriseValue - dividaLiquida;
-  const tir = wacc + crescimentoReceita * fatorInvestimento * 0.5;
+  const tir = calcularTIR(fcffPorAno) ?? valuationBase.tir;
 
   return { receitaPorAno, ebitdaPorAno, enterpriseValue, equityValue, vplOperacional, tir };
 }
@@ -122,8 +179,8 @@ function calcularMetricasSimuladas({ receitaPorAno, ebitdaPorAno, premissas }) {
 export function calcularProjecao(premissas) {
   if (ehCenarioBase(premissas)) {
     return {
-      receitaPorAno: anosProjecao.map((ano) => dre.receitaLiquida[anos.indexOf(ano)]),
-      ebitdaPorAno: anosProjecao.map((ano) => dre.ebitda[anos.indexOf(ano)]),
+      receitaPorAno: receitaReal,
+      ebitdaPorAno: ebitdaReal,
       enterpriseValue: valuationBase.enterpriseValue,
       equityValue: valuationBase.equityValue,
       vplOperacional: valuationBase.vplOperacional,
@@ -132,9 +189,8 @@ export function calcularProjecao(premissas) {
     };
   }
 
-  const { receitaPorAno, ebitdaPorAno } = projetarCenarioSimulado(premissas);
   return {
-    ...calcularMetricasSimuladas({ receitaPorAno, ebitdaPorAno, premissas }),
+    ...calcularMetricasSimuladas(premissas),
     cenarioBase: false,
   };
 }
